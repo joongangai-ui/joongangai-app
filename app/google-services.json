@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "730455069637",
+    "project_id": "jaitpms",
+    "storage_bucket": "jaitpms.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730455069637:android:843f8abdec5e6c0dfc31ac",
+        "android_client_info": {
+          "package_name": "com.joongang.insp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0QKoMHzRtK1KxVyDtAWzXioVV76bDl6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
