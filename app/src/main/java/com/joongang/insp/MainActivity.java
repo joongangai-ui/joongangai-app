@@ -36,7 +36,6 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    // ★ 앱이 열 모바일 페이지 주소 (http/https 모두 지원). 여기만 바꾸면 됨.
     private static final String START_URL = "https://jaitpms.com/printer-monitor/nas-web/m.php";
 
     private WebView web;
@@ -52,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         requestStartupPermissions();
+
+        MyFirebaseMessagingService.ensureChannel(this);
+        MyFirebaseMessagingService.registerToken(this);
 
         web = new WebView(this);
         setContentView(web);
@@ -77,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
                 Uri u = req.getUrl();
                 String scheme = u.getScheme();
-                // http/https 는 앱 내부 WebView 에서, 그 외(tel/mailto/intent 등)는 외부 앱으로
                 if (scheme != null && (scheme.equals("http") || scheme.equals("https"))) {
                     return false;
                 }
@@ -91,12 +92,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         web.setWebChromeClient(new WebChromeClient() {
-            // getUserMedia(카메라/마이크) 권한 자동 허용
             @Override
             public void onPermissionRequest(final PermissionRequest request) {
                 runOnUiThread(() -> request.grant(request.getResources()));
             }
-            // 파일/사진 첨부 (input type=file, 서명 사진 등)
             @Override
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> cb, FileChooserParams params) {
                 if (filePathCallback != null) filePathCallback.onReceiveValue(null);
@@ -106,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // 다운로드(첨부파일 저장)는 시스템 다운로드 매니저로
         web.setDownloadListener(new DownloadListener() {
             @Override
             public void onDownloadStart(String url, String ua, String cd, String mime, long len) {
@@ -118,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // 뒤로가기 = 웹 히스토리 우선
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -132,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openFileChooser(WebChromeClient.FileChooserParams params) {
-        // 갤러리/문서 선택
         Intent content = new Intent(Intent.ACTION_GET_CONTENT);
         content.addCategory(Intent.CATEGORY_OPENABLE);
         content.setType("*/*");
@@ -143,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
             content.setType("*/*");
         }
 
-        // 카메라 촬영(권한 있을 때만)
         List<Intent> extras = new ArrayList<>();
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             Intent cam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
