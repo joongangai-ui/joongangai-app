@@ -37,7 +37,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     // ★ 앱이 열 모바일 페이지 주소 (http/https 모두 지원). 여기만 바꾸면 됨.
-    private static final String START_URL = "https://jaitpms.com/m.php";
+    private static final String START_URL = "https://jaitpms.com/printer-monitor/nas-web/m.php";
 
     private WebView web;
     private ValueCallback<Uri[]> filePathCallback;
